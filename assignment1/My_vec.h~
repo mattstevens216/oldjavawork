@@ -1,0 +1,164 @@
+/*My_vec.h
+Your name
+Header file for a vector data structure.
+*/
+
+#include <ostream>
+
+using namespace std;
+
+template <typename T> class My_vec{
+private:
+	//member variables
+	int size, capacity;
+	T *ptr;
+		
+public:	
+	//member functions
+	My_vec();
+	~My_vec();
+	My_vec(const My_vec<T>& v);
+	My_vec<T>&operator=(const My_vec<T>& v);
+	int get_size() const;
+	int get_capacity() const;
+	My_vec<T>& operator[](int i) const;
+	My_vec<T>& operator[](int i);
+	bool is_empty() const;
+	T& elem_at_rank(int r) const;
+	void insert_at_rank(int r, const T& elem);
+	void replace_at_rank(int r, const T& elem);
+	void remove_at_rank(int r);
+};	
+	template<typename T>ostream& operator<<(ostream& out, const My_vec<T>&v);
+	
+	template<typename T>int find_max_index(const My_vec<T>&v, int size){
+	int largest = v[0];
+	for(int i = 1; i < size; i++)
+		if(largest < v[i])
+		     largest = v[i];
+	return largest;
+	}
+
+	template<typename T>
+	void sort_max(My_vec<T>&v){
+		for(int k = 0; k < v.get_size()-1; k++)
+		{
+		int index = k;
+		for(int i = k+1; i < v.get_size(); i++)	
+			if(find_max_index(v, v.get_size()) < v[index]) 
+				index = v[i];
+		int tmp = v[k];
+		v[k] = v[index];
+		}
+		
+	}
+			
+
+template<typename T>
+int My_vec<T>::get_size() const{
+return size;
+}
+
+template<typename T>
+int My_vec<T>::get_capacity() const{
+return capacity;
+}
+
+template<typename T>
+My_vec <T>& My_vec<T>::operator=(const My_vec<T>& v){
+	if(this != &v){
+	delete [] ptr;
+	size = v.size;
+	capacity = v.capacity;
+	ptr = new T(capacity);
+	for(int i = 0; i < capacity; i++)
+		ptr[i] = v.ptr[i];
+	}
+return *this;
+}
+
+
+template<typename T>
+My_vec<T>&My_vec<T>::operator[](int i) const{
+	return ptr[i];
+}
+
+template<typename T>
+My_vec<T>&My_vec<T>::operator[](int i){
+	return ptr[i];
+}
+
+template<typename T>
+bool My_vec<T>::is_empty() const{
+	return size == 0;
+}
+
+
+template<typename T>
+T& My_vec<T>::elem_at_rank(int r) const{
+return ptr[r];
+}
+
+template<typename T>
+void My_vec<T>::insert_at_rank(int r, const T& elem){
+        if(r < 0 || r > size){
+		cout<<"out_of_bound" << endl;
+		return ;
+	}
+	if(capacity <= size){
+		T* m = new T[capacity*2];
+	for(int i = 0; i < capacity; ++i)
+		m[i] = ptr[i];
+	delete [] ptr;
+	ptr = m;
+	ptr[r] = elem;
+	capacity = capacity*2;
+	}
+	for(int i = size-1; r <= i; i--)
+		ptr[i+1] = ptr[i];
+	ptr[r] = elem;
+	size++;
+}
+template<typename T>
+void My_vec<T>::replace_at_rank(int r, const T& elem){
+	ptr[r] = elem;
+}
+
+template<typename T>
+void My_vec<T>::remove_at_rank(int r){	
+	if(r<0 || r>=size)
+	{
+		cout<<"out of bound"<<endl;
+		return;
+	}
+	for(int i = r+1; i < size; i++)
+		ptr[i-1] = ptr[i];
+	size = size-1;	
+}
+
+template<typename T>
+My_vec<T>::My_vec():capacity(10), size(0), ptr(new T[capacity]){}
+
+
+template<typename T>
+My_vec <T>::My_vec(const My_vec& v): capacity(v.capacity), size(v.size){
+	this->capacity = v.capacity;
+	this->size = v.size;
+	this->ptr = new T[capacity];
+	for(int i=0; i < capacity; i++)
+	   this->ptr[i] = v.ptr[i];
+}
+
+
+template<typename T>
+My_vec<T>::~My_vec(){
+	delete [] ptr;
+}
+
+template<typename T>
+ostream& operator<<(ostream& out, const My_vec <T>&v){
+	for(int i = 0; i < v.get_size(); ++i)
+		out << "Index " << i << ": " << v.elem_at_rank(i) << "     ";
+	return out;
+}
+
