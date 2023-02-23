@@ -1,0 +1,6 @@
+node count: 15
+average search cost: 3.26667
+x x x 8 x x x x  ENDL
+x 4 x x x 12 x x  ENDL
+2 x 6 x 10 x 14 x  ENDL
+1 3 5 7 9 11 13 15  ENDL
